@@ -17,6 +17,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { lessons, cases, questions, sources } from './study-data';
+import { diseaseLibrary } from './disease-library';
 
 const spots = [
   {
@@ -173,6 +174,9 @@ export default function Home() {
   const [tab, setTab] = useState('learn'),
     [step, setStep] = useState(0),
     [completed, setCompleted] = useState<number[]>([]),
+    [diseaseIndex, setDiseaseIndex] = useState(0),
+    [imageIndex, setImageIndex] = useState(0),
+    [caseReveal, setCaseReveal] = useState(false),
     [caseIndex, setCaseIndex] = useState(0),
     [reveal, setReveal] = useState(false),
     [hint, setHint] = useState(false),
@@ -180,6 +184,8 @@ export default function Home() {
     [answers, setAnswers] = useState<Record<number, number>>({}),
     [finished, setFinished] = useState(false);
   const lesson = lessons[step],
+    disease = diseaseLibrary[diseaseIndex],
+    libraryImage = disease.images[imageIndex],
     c = cases[caseIndex],
     question = questions[q],
     answered = answers[q] !== undefined,
@@ -188,6 +194,15 @@ export default function Home() {
     setCompleted((v) => (v.includes(step) ? v : [...v, step]));
     if (step < 6) setStep(step + 1);
     else setTab('cases');
+  }
+  function changeDisease(i: number) {
+    setDiseaseIndex(i);
+    setImageIndex(0);
+    setCaseReveal(false);
+  }
+  function changeLibraryImage(i: number) {
+    setImageIndex(i);
+    setCaseReveal(false);
   }
   function changeCase(i: number) {
     setCaseIndex(i);
@@ -311,6 +326,139 @@ export default function Home() {
           </div>
         </TabsContent>
         <TabsContent value="cases">
+          <section className="intro library-intro">
+            <div>
+              <p className="eyebrow">02 / COMMON CXR PATTERN LIBRARY</p>
+              <h1>常見病灶，每一類看滿 5 張。</h1>
+              <p>選疾病、換病例、先自己找線索，再展開判讀提示。</p>
+            </div>
+            <span className="time-tag">8 類 · 40 張真實胸片</span>
+          </section>
+          <div className="disease-workspace">
+            <nav className="disease-rail" aria-label="常見胸片疾病分類">
+              <p className="rail-title">疾病分類</p>
+              {diseaseLibrary.map((item, i) => (
+                <button
+                  key={item.key}
+                  className={diseaseIndex === i ? 'active' : ''}
+                  onClick={() => changeDisease(i)}
+                  aria-pressed={diseaseIndex === i}
+                >
+                  <span>{String(i + 1).padStart(2, '0')}</span>
+                  <div>
+                    <strong>{item.title}</strong>
+                    <small>{item.images.length} 張影像</small>
+                  </div>
+                </button>
+              ))}
+            </nav>
+            <section className="library-main">
+              <div className="library-heading">
+                <div>
+                  <p className="eyebrow">{disease.en}</p>
+                  <h2>{disease.title}</h2>
+                </div>
+                <span>{String(imageIndex + 1).padStart(2, '0')} / 05</span>
+              </div>
+              <Viewer key={libraryImage.src} src={libraryImage.src} />
+              <div className="library-caption">
+                <p>{libraryImage.note}</p>
+                <p className="image-credit">
+                  {libraryImage.artist || 'Wikimedia Commons contributor'} ·{' '}
+                  <a
+                    href={libraryImage.licenseUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {libraryImage.license}
+                  </a>{' '}
+                  ·{' '}
+                  <a
+                    href={libraryImage.pageUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    原圖與病例說明 ↗
+                  </a>
+                </p>
+              </div>
+              <div
+                className="thumbnail-strip"
+                aria-label={`${disease.title}病例選擇`}
+              >
+                {disease.images.map((image, i) => (
+                  <button
+                    key={image.title}
+                    className={imageIndex === i ? 'active' : ''}
+                    onClick={() => changeLibraryImage(i)}
+                    aria-label={`${disease.title}影像 ${i + 1}`}
+                    aria-pressed={imageIndex === i}
+                  >
+                    <img src={image.src} alt="" loading="lazy" />
+                    <span>病例 {String(i + 1).padStart(2, '0')}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+            <aside className="library-guide">
+              <div className="section-label">
+                判讀焦點 <span>先看圖再展開</span>
+              </div>
+              <h2>{disease.prompt}</h2>
+              <div className="observation">
+                <span>這一類要找</span>
+                <ol>
+                  {disease.lookFor.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ol>
+              </div>
+              <button
+                className="primary reveal-button"
+                onClick={() => setCaseReveal(!caseReveal)}
+                aria-expanded={caseReveal}
+              >
+                {caseReveal ? '收起完整提示' : '我看好了，展開提示'}
+                <Eye size={18} />
+              </button>
+              {caseReveal && (
+                <div className="library-answer" aria-live="polite">
+                  <div className="pearl">
+                    <Lightbulb size={20} />
+                    <div>
+                      <strong>容易踩的坑</strong>
+                      <p>{disease.pitfall}</p>
+                    </div>
+                  </div>
+                  <p className="report">
+                    <span>練習報告骨架</span>
+                    {disease.report}
+                  </p>
+                </div>
+              )}
+              <div className="pager library-pager">
+                <button
+                  disabled={imageIndex === 0}
+                  onClick={() => changeLibraryImage(imageIndex - 1)}
+                >
+                  <ChevronLeft size={18} />
+                  上一張
+                </button>
+                <button
+                  disabled={imageIndex === disease.images.length - 1}
+                  onClick={() => changeLibraryImage(imageIndex + 1)}
+                >
+                  下一張
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+              <p className="library-scope">
+                同一疾病可能有不同外觀；5 張用來建立模式辨識，不代表所有表現。
+              </p>
+            </aside>
+          </div>
+        </TabsContent>
+        <TabsContent value="legacy-cases">
           <section className="intro">
             <div>
               <p className="eyebrow">02 / LOOK · DESCRIBE · EXPLAIN</p>

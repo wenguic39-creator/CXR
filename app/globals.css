@@ -366,6 +366,163 @@ main {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+.library-intro {
+  padding-bottom: 22px;
+}
+.disease-workspace {
+  display: grid;
+  grid-template-columns: 190px minmax(430px, 1fr) minmax(300px, 350px);
+  gap: 20px;
+  align-items: start;
+}
+.disease-rail,
+.library-guide {
+  border: 1px solid var(--border);
+  background: #131c23;
+  border-radius: 12px;
+}
+.disease-rail {
+  padding: 13px;
+  display: grid;
+  gap: 6px;
+}
+.rail-title {
+  padding: 7px 9px 11px;
+  color: #8fa0ab;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+}
+.disease-rail button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 9px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #aebcc5;
+  text-align: left;
+}
+.disease-rail button > span {
+  font: 12px monospace;
+  color: #71838f;
+}
+.disease-rail button div {
+  min-width: 0;
+}
+.disease-rail strong,
+.disease-rail small {
+  display: block;
+}
+.disease-rail strong {
+  font-size: 14px;
+  white-space: nowrap;
+}
+.disease-rail small {
+  margin-top: 1px;
+  font-size: 11px;
+  color: #70838f;
+}
+.disease-rail button.active {
+  border-color: #58714c;
+  background: #243320;
+  color: #e1f4d7;
+}
+.disease-rail button.active > span,
+.disease-rail button.active small {
+  color: var(--primary);
+}
+.library-main {
+  min-width: 0;
+}
+.library-heading {
+  min-height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 13px;
+}
+.library-heading .eyebrow {
+  margin-bottom: 2px;
+}
+.library-heading h2 {
+  font-size: 25px;
+}
+.library-heading > span {
+  font: 14px monospace;
+  color: var(--primary);
+}
+.library-caption {
+  min-height: 80px;
+  padding: 13px 3px 8px;
+}
+.library-caption > p:first-child {
+  color: #c8d5dc;
+  font-size: 15px;
+}
+.library-caption .image-credit {
+  padding: 4px 0 0;
+}
+.thumbnail-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+.thumbnail-strip button {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #36454f;
+  border-radius: 7px;
+  background: #101820;
+  color: #91a2ae;
+}
+.thumbnail-strip img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center;
+  background: #000;
+  filter: grayscale(1);
+}
+.thumbnail-strip span {
+  display: block;
+  padding: 5px 3px;
+  font: 11px monospace;
+}
+.thumbnail-strip button.active {
+  border-color: var(--primary);
+  color: #daf2cb;
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.library-guide {
+  margin-top: 77px;
+  padding: 22px;
+}
+.library-guide h2 {
+  margin: 22px 0 0;
+  font-size: 20px;
+}
+.reveal-button {
+  width: 100%;
+  justify-content: space-between;
+}
+.library-answer {
+  margin-top: 17px;
+}
+.library-pager {
+  border-top: 1px solid #32404a;
+  margin-top: 21px;
+  padding-top: 13px;
+}
+.library-scope {
+  margin-top: 16px;
+  color: #8295a2;
+  font-size: 12px;
+  line-height: 1.75;
+}
 .lesson-panel {
   border: 1px solid var(--border);
   background: #131c23;
@@ -865,6 +1022,24 @@ footer button {
   }
 }
 @media (max-width: 1000px) {
+  .disease-workspace {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+  }
+  .disease-rail {
+    grid-column: 1 / -1;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-color: #475a65 #121a21;
+  }
+  .rail-title {
+    display: none;
+  }
+  .disease-rail button {
+    min-width: 164px;
+  }
+  .library-guide {
+    margin-top: 77px;
+  }
   .learning-grid {
     grid-template-columns: minmax(0, 1.2fr) minmax(320px, 1fr);
     gap: 18px;
@@ -940,6 +1115,23 @@ footer button {
   }
   .learning-grid {
     grid-template-columns: 1fr;
+  }
+  .disease-workspace {
+    grid-template-columns: 1fr;
+  }
+  .disease-rail {
+    grid-column: auto;
+  }
+  .library-guide {
+    margin-top: 6px;
+  }
+  .library-heading {
+    min-height: 54px;
+  }
+  .thumbnail-strip {
+    grid-template-columns: repeat(5, 105px);
+    overflow-x: auto;
+    padding: 2px 2px 8px;
   }
   .lesson-panel {
     padding: 22px;

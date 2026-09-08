@@ -329,10 +329,10 @@ export default function Home() {
           <section className="intro library-intro">
             <div>
               <p className="eyebrow">02 / COMMON CXR PATTERN LIBRARY</p>
-              <h1>常見病灶，每一類看滿 5 張。</h1>
+              <h1>常見病灶，每一類看滿 10 張。</h1>
               <p>選疾病、換病例、先自己找線索，再展開判讀提示。</p>
             </div>
-            <span className="time-tag">8 類 · 40 張真實胸片</span>
+            <span className="time-tag">8 類 · 80 張真實胸片</span>
           </section>
           <div className="disease-workspace">
             <nav className="disease-rail" aria-label="常見胸片疾病分類">
@@ -358,7 +358,10 @@ export default function Home() {
                   <p className="eyebrow">{disease.en}</p>
                   <h2>{disease.title}</h2>
                 </div>
-                <span>{String(imageIndex + 1).padStart(2, '0')} / 05</span>
+                <span>
+                  {String(imageIndex + 1).padStart(2, '0')} /{' '}
+                  {String(disease.images.length).padStart(2, '0')}
+                </span>
               </div>
               <Viewer key={libraryImage.src} src={libraryImage.src} />
               <div className="library-caption">
@@ -453,7 +456,7 @@ export default function Home() {
                 </button>
               </div>
               <p className="library-scope">
-                同一疾病可能有不同外觀；5 張用來建立模式辨識，不代表所有表現。
+                同一疾病可能有不同外觀；10 張用來建立模式辨識，不代表所有表現。
               </p>
             </aside>
           </div>
